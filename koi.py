@@ -1,0 +1,82 @@
+import matplotlib.pyplot as plt
+import numpy as np
+import re
+import sys
+
+koi = 150 # kg
+koish = 0 # kg
+ruccola = 7.5 # kg
+
+start = 000
+end = 200
+length = end - start
+
+mating_factor = .08
+death_rate = .01
+harvest_quota = .2;
+
+harvest = 0
+
+ruccola_limit = 10
+ruccola_harvest = 0
+
+# Parse input with RegEx and handle errors
+try:
+    indata = re.search(
+        r"(v(?:ar(?:iab(?:le|el))?)?|[kc](?:onst(?:ant)?)?)\b[\s:,;]+(\d*\.?\d*)(%?)",
+        raw_input("Enter `var|const amount`:\n"),
+        flags = re.IGNORECASE)
+
+    harvest_mode = indata.group(1).lower()[0]
+    if harvest_mode == "k":
+        harvest_mode = "c"
+
+    harvest_amount = float(indata.group(2))
+    if indata.group(3):
+        harvest_amount /= 100
+except:
+    print("Invalid input!")
+    sys.exit()
+
+
+def f_koi(koi, harvest):
+    if harvest_mode == "c":
+        koi *= 1 + mating_factor - death_rate
+        if harvest_amount <= koi * harvest_quota:
+            koi -= harvest_amount
+            harvest += harvest_amount
+    else:
+        koi *= 1 + mating_factor - death_rate
+        if koi - koi * harvest_amount >= 1000 * harvest_quota:
+            koi -= koi * harvest_amount
+            harvest += koi * harvest_amount
+    return [koi, harvest]
+
+def f_koishit(koi):
+    return koi * .05
+
+def f_ruccola(ruccola, koishit, ruccola_harvest):
+    ruccola = min(ruccola * 1.08, koishit)
+    if (ruccola >= ruccola_limit):
+        ruccola_harvest += ruccola
+        ruccola = 2
+    return ruccola, ruccola_harvest
+
+xs = np.linspace(start, end, num=length)
+ks = np.zeros(length)
+rs = np.zeros(length)
+hs = np.zeros(length)
+
+for i in range(0, length):
+    koi, harvest = f_koi(koi, harvest)
+    koish = f_koishit(koi)
+    ruccola, ruccola_harvest = f_ruccola(ruccola, koish, ruccola_harvest)
+    ks[i] = koi
+    rs[i] = ruccola
+    hs[i] = harvest
+
+plt.plot(xs, ks)
+plt.plot(xs, rs)
+# plt.plot(xs, hs) # Harvest
+plt.grid(True)
+plt.show()
