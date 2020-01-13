@@ -22,16 +22,20 @@ ruccola_harvest = 0
 
 # Parse input with RegEx and handle errors
 try:
+    # Matches variations of `variable|constant number` input
     indata = re.search(
         r"(v(?:ar(?:iab(?:le|el))?)?|[kc](?:onst(?:ant)?)?)\b[\s:,;]+(\d*\.?\d*)(%?)",
-        raw_input("Enter `var|const amount`:\n"),
+        input("Enter `var|const amount`:\n"),
         flags = re.IGNORECASE)
 
+    # Find harvest mode key
     harvest_mode = indata.group(1).lower()[0]
     if harvest_mode == "k":
         harvest_mode = "c"
 
+    # Find harvest value modifier
     harvest_amount = float(indata.group(2))
+    # Handle percentage
     if indata.group(3):
         harvest_amount /= 100
 except:
@@ -76,7 +80,7 @@ for i in range(0, length):
     hs[i] = harvest
 
 plt.plot(xs, ks)
-plt.plot(xs, rs)
-# plt.plot(xs, hs) # Harvest
+# plt.plot(xs, rs) # Ruccola
+plt.plot(xs, hs) # Harvest
 plt.grid(True)
 plt.show()
