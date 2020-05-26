@@ -32,7 +32,7 @@ def linear_srs(days):
     return Rs
 
 def growing_srs(days, ease=2.5, ideal_retention=.8):
-    Rs = [[(1.0, 1.0)]] # Retention rates
+    Rs = [[(0, 1)]] # Retention rates
     funcs = [dgen(Ak, Ac)]
 
     i = 0
@@ -41,7 +41,7 @@ def growing_srs(days, ease=2.5, ideal_retention=.8):
         first_day = Rs[i][0][0]
 
         # Calculate retention rate for each day
-        for day in range(int(first_day) + 1, days):
+        for day in range(int(first_day) + 1, days + 1):
             retention = funcs[i](day - first_day + 1)
             Rs[i].append((day, retention))
 
@@ -54,7 +54,7 @@ def growing_srs(days, ease=2.5, ideal_retention=.8):
         i += 1
     return Rs
 
-
+# Plotting
 def plot_figure(axs, title, vals):
     axs.set_title(title)
     for i in range(0, len(vals)):
@@ -63,6 +63,6 @@ def plot_figure(axs, title, vals):
 fig, axs = plt.subplots(2, 1, constrained_layout=True, figsize=(7, 9))
 
 plot_figure(axs[0], "Growing SRS", growing_srs(14))
-plot_figure(axs[1], "Linear SRS", linear_srs(14))
+plot_figure(axs[1], "Linear SRS",  linear_srs( 14))
 
 plt.show()
