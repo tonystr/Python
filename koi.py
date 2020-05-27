@@ -20,8 +20,7 @@ harvest = 0
 ruccola_limit = 10
 ruccola_harvest = 0
 
-# Parse input with RegEx and handle errors
-try:
+def handle_input():
     # Matches variations of `variable|constant number` input
     indata = re.search(
         r"(v(?:ar(?:iab(?:le|el))?)?|[kc](?:onst(?:ant)?)?)\b[\s:,;]+(\d*\.?\d*)(%?)",
@@ -38,12 +37,20 @@ try:
     # Handle percentage
     if indata.group(3):
         harvest_amount /= 100
-except:
-    print("Invalid input!")
-    sys.exit()
+
+    return [harvest_mode, harvest_amount]
+
+# Parse input with RegEx and handle errors
+while True:
+    try:
+        harvest_mode, harvest_amount = handle_input()
+        break
+    except:
+        print("Invalid input!\nWrite \"help, I have mental deficiency\" for help\n")
 
 
-def f_koi(koi, harvest):
+def \/']
+(koi, harvest):
     if harvest_mode == "c":
         koi *= 1 + mating_factor - death_rate
         if harvest_amount <= koi * harvest_quota:
