@@ -1,7 +1,6 @@
 import math
 import numpy as np
 import matplotlib.pyplot as plt
-import random
 from matplotlib.pyplot import figure
 
 # Spaced Repetition System (SRS) based on Hermann Ebbinghaus' theory of the forgetting curve
@@ -62,13 +61,14 @@ def growing_srs(days, ideal_retention=.8):
 # Plot individual SRS' results
 def plot_figure(axs, title, vals):
     axs.set_title(title)
+    axs.grid(color="#f0f0f0")
     for i in range(0, len(vals)):
         axs.plot(*zip(*vals[i]))
 
 # Plotting
 fig, axs = plt.subplots(2, 1, constrained_layout=True, figsize=(7, 9))
 
-plot_figure(axs[0], "Growing SRS", growing_srs(14))
+plot_figure(axs[0], "Growing SRS", growing_srs(14, ideal_retention=.82))
 plot_figure(axs[1], "Linear SRS",  linear_srs( 14))
 
 plt.show()
